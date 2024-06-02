@@ -1,23 +1,27 @@
-import { useState } from 'react';
-import Navbar from './Navbar.jsx';
-import Login from './Login.jsx';
+// src/App.jsx
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import LandingPage from "./pages/LandingPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
-function App() {
-  const [count, setCount] = useState(0);
-
+const App = () => {
   return (
-    <>
+    <Router>
       <Navbar />
-      <div className="container mx-auto mt-10">
-        <h1 className="text-2xl font-semibold mb-4">Welcome to Project Collaborator</h1>
-        <p className="mb-4">Please login or register to get started.</p>
-        <div className="flex space-x-4">
-          <button className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md">Login</button>
-          <button className="bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-md">Register</button>
-        </div>
+      <div className="main-content">
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/find-collaborator" element={<LandingPage />} /> {/* Placeholder */}
+          <Route path="/find-projects" element={<LandingPage />} /> {/* Placeholder */}
+          <Route path="/profile" element={<LandingPage />} /> {/* Placeholder */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Routes>
       </div>
-    </>
+    </Router>
   );
-}
+};
 
 export default App;
