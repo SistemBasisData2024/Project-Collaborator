@@ -1,4 +1,5 @@
 const pool = require('../config/database');
+const { BaseApiResponse } = require('../config/utils');
 
 // Controller untuk membuat pengguna baru
 exports.register = async (req, res) => {
@@ -11,12 +12,12 @@ exports.register = async (req, res) => {
              [name, email, password]
             );
 
-        res.status(201).json(result.rows[0]);
+        res.status(200).json(BaseApiResponse('Succesfully Create User', result.rows[0]));
     } 
     
     catch (error) {
-        console.error('Error adding user:', error);
-        res.status(400).json({ error: error.message });
+        console.log(error);
+        res.status(500).json(error.message, null);
     }
 };
 
@@ -26,26 +27,27 @@ exports.login = async (req, res) => {
     try {
         const result = await pool.query(`SELECT * FROM users WHERE email = $1 AND password = $2`, [email, password]);
 
-        if(result.rows.length == 0) throw new Error('User not Exist');
+        if(result.rows.length == 0) 
+            return res.status(404).json(BaseApiResponse('User Not Found', null));
         
-        res.status(201).json(result.rows[0]); // Mengembalikan data user yang baru ditambahkan
+        return res.status(200).json(BaseApiResponse("Login Succesful", result.rows[0])); // Mengembalikan data user yang baru ditambahkan
     } 
     
     catch (error) {
-        console.error('Error login user:', error);
-        res.status(400).json({ error: error.message });
+        console.log(error);
+        return res.status(500).json(BaseApiResponse(error.message, null));
     }
 }
 
 exports.getAvailableCollaborator = async (req, res) => {
     try{
         const result = await pool.query(`SELECT * FROM users WHERE open_to_work = TRUE`);
-        res.status(200).json(result.rows); 
+        return res.status(200).json(BaseApiResponse("Successfully get users", result.rows)); 
     }
 
     catch(error){
-        console.error('Error getting all user :', error);
-        res.status(400).json({ error: error.message });
+        console.log(error);
+        return res.status(500).json(BaseApiResponse(error.message, null));
     }
 }
 
@@ -56,34 +58,37 @@ exports.getUserById = async (req, res) => {
     try {
         const result = await pool.query(`SELECT * FROM users WHERE id = $1`, [id]);
 
-        if(result.rows.length == 0) throw new Error('User Not Found');
+        if(result.rows.length == 0) 
+            return res.status(404).json(BaseApiResponse('User Not Found', null));
 
-        res.status(200).json(result.rows[0]); // Mengembalikan data user yang ditemukan
+        return res.status(200).json(BaseApiResponse("Succesfully get user", result.rows[0])); // Mengembalikan data user yang ditemukan
     } 
     
     catch (error) {
-        console.error('Error getting user by ID:', error);
-        res.status(400).json({ error: error.message });
+        console.log(error);
+        return res.status(500).json(BaseApiResponse(error.message, null));
     }
 };
 
 // Controller untuk memperbarui pengguna berdasarkan ID
 exports.updateUserById = async (req, res) => {
     const id = req.params.id;
-    const { name, email, password, profile_picture, bio, open_to_work } = req.body;
+    const { name, profile_picture, bio, open_to_work } = req.body;
 
     try {
+        const result = await pool.query( `UPDATE users SET name = $1, 
+            profile_pic = $2, bio = $3, open_to_work = $4
+            WHERE id = $5 RETURNING *`, [name, profile_picture, bio, open_to_work, id]);
 
-        const result = await pool.query( `UPDATE users SET name = $1, email = $2, 
-            password = $3, profile_picture = $4, bio = $5, open_to_work = $6
-            WHERE id = $7 RETURNING *`, [name, email, password, profile_picture, bio, open_to_work, id]);
-
-        res.status(200).json(result.rows[0]); // Mengembalikan data user yang telah diperbarui
+        if(result.rows.length == 0)
+            return res.status(404).json(BaseApiResponse('User Not Found', null));
+        
+        return res.status(200).json(BaseApiResponse("Succesfully update user", result.rows[0])); // Mengembalikan data user yang telah diperbarui
     } 
     
     catch (error) {
-        console.error('Error updating user by ID:', error);
-        res.status(400).json({ error: error.message });
+        console.log(error);
+        return res.status(500).json(BaseApiResponse(error.message, null));
     }
 };
 
@@ -93,11 +98,11 @@ exports.deleteUserById = async (req, res) => {
 
     try {
         await pool.query(`DELETE FROM users WHERE id = $1`, [id]);
-        res.status(204).json();
-    } catch (error) {
-        console.error('Error deleting user by ID:', error);
-        res.status(400).json({ error: error.message });
+        return res.status(200).json(BaseApiResponse("Sucessfully deleted user", null));
+    } 
+    
+    catch (error) {
+        console.log(error);
+        return res.status(500).json(BaseApiResponse(error.message, null));
     }
 };
-
-module.exports = exports;

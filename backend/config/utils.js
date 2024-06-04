@@ -1,4 +1,4 @@
-export const BaseApiResponse = (message, data) => ({
+exports.BaseApiResponse = (message, data) => ({
     message: message,
     data: data
 })
