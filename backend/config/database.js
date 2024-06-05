@@ -1,5 +1,5 @@
 const { Pool } = require('pg');
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config();
 
 const pool = new Pool({
     user: process.env.PGUSER,
@@ -10,12 +10,6 @@ const pool = new Pool({
     ssl: {
         require: true,
     },
-});
-
-pool.connect().then(() => {
-    console.log('Connected to the NeonDB');
-}).catch(error => {
-    console.error('Connection error', error);
 });
 
 module.exports = pool;
