@@ -1,4 +1,5 @@
 const pool = require('../config/database');
+const { BaseApiResponse } = require('../config/utils');
 
 // Controller untuk membuat proyek baru
 exports.createProject = async (req, res) => {
@@ -9,12 +10,12 @@ exports.createProject = async (req, res) => {
                 VALUES ($1, $2, $3, $4)
                 RETURNING *`, [name, description, owner_id, status]);
 
-        res.status(201).json(result.rows[0]); // Mengembalikan data proyek yang baru ditambahkan
+        res.status(201).json(BaseApiResponse('Successfully created projects', result.rows[0])); // Mengembalikan data proyek yang baru ditambahkan
     } 
     
     catch (error) {
-        console.error('Error adding project:', error);
-        res.status(400).json({ error: error.message });
+        console.log(error);
+        res.status(500).json(BaseApiResponse(error.message, null));
     }
 };
 
@@ -22,12 +23,12 @@ exports.createProject = async (req, res) => {
 exports.getAllOpenProjects = async (req, res) => {
     try {
         const result = await pool.query(`SELECT * FROM projects WHERE status = 'OPEN'`);
-        res.status(200).json(result.rows); // Mengembalikan semua data proyek
+        res.status(200).json(BaseApiResponse('Successfully get all open projects', result.rows)); // Mengembalikan semua data proyek
     } 
     
     catch (error) {
-        console.error('Error getting all projects:', error);
-        res.status(400).json({ error: error.message });
+        console.log(error);
+        res.status(500).json(BaseApiResponse(error.message, null));
     }
 };
 
@@ -40,12 +41,12 @@ exports.getUserRunningProjects = async (req, res) => {
                 SELECT project_id FROM collaborators WHERE user_id = $1
             )) AND progress = 'RUNNING'`, [id]);
 
-        res.status(200).json(result.rows);
+        res.status(200).json(BaseApiResponse('Succesfully get user running projects', result.rows));
     }
 
     catch(error){
-        console.error('Error getting running projects:', error);
-        res.status(400).json({ error: error.message });
+        console.log(error);
+        res.status(500).json(BaseApiResponse(error.message, null));
     }
 }
 
@@ -55,12 +56,12 @@ exports.getUserProjects = async (req, res) => {
     try{
         const result = await pool.query(`SELECT * FROM projects WHERE owner_id = $1`, [id]);
 
-        res.status(200).json(result.rows);
+        res.status(200).json(BaseApiResponse('Successfully get all user project', result.rows));
     }
 
     catch(error){
-        console.error('Error getting user projects:', error);
-        res.status(400).json({ error: error.message });
+        console.log(error);
+        res.status(500).json(BaseApiResponse(error.message, null ));
     }
 }
 
@@ -72,12 +73,12 @@ exports.getUserExperiences = async (req, res) => {
                 OR id = (
                     SELECT project_id FROM collaborators WHERE user_id = $1
                 )) AND progress = 'DONE'`, [id]);
-        res.status(200).json(result.rows); // Mengembalikan semua data proyek
+        res.status(200).json(BaseApiResponse('Successfully get experiences', result.rows)); // Mengembalikan semua data proyek
     } 
     
     catch (error) {
-        console.error('Error getting all projects:', error);
-        res.status(400).json({ error: error.message });
+        console.log(error);
+        res.status(500).json(BaseApiResponse(error.message, null ));
     }
 }
 
@@ -86,16 +87,41 @@ exports.getProjectById = async (req, res) => {
     const projectId = req.params.id;
 
     try {
-        const result = await pool.query(`SELECT * FROM projects WHERE id = $1`, [projectId]);
+        let data = await pool.query(`SELECT * FROM projects WHERE id = $1`, [projectId]);
 
-        if(result.rows.length == 0) throw new Error('Project Not Found');
+        if(data.rows.length == 0) 
+            return res.status(404).json(BaseApiResponse('Project Not Found', null));
+        
+        const projectData = data.rows[0];
+        
+        data = await pool.query('SELECT * FROM users WHERE id = $1', [projectData.owner_id]);
+        const userData = data.rows[0];
 
-        res.status(200).json(result.rows[0]); // Mengembalikan data proyek yang ditemukan
+        data = await pool.query(`SELECT users.id AS id, users.name AS name, users.profile_pic AS profile_pic, collaborators.role AS role
+            FROM collaborators INNER JOIN users on collaborators.user_id = users.id WHERE project_id = $1`, [projectData.id]);
+        const collaboratorsData = data.rows;
+
+        const result = {
+            name: projectData.name,
+            description: projectData.description,
+            status: projectData.status,
+            progress: projectData.progress,
+            started_at: projectData.started_at,
+            ended_at: projectData.ended_at,
+            owner: {
+                id: userData.id,
+                name: userData.name,
+                email: userData.email,
+                profile_pic: userData.profile_pic
+            },
+            collaborator: collaboratorsData
+        }
+        res.status(200).json(BaseApiResponse('Successfully get project', result)); // Mengembalikan data proyek yang ditemukan
     } 
     
     catch (error) {
-        console.error('Error getting project by ID:', error);
-        res.status(400).json({ error: error.message });
+        console.log(error);
+        res.status(500).json(BaseApiResponse(error.message, null ));
     }
 };
 
@@ -107,43 +133,58 @@ exports.finishProject = async (req, res) => {
             SET status = 'CLOSED', progress = 'DONE', ended_at = CURRENT_TIMESTAMP 
             WHERE id = $1 RETURNING *`, [id]);
 
+        if(update.rows.length == 0)
+            return res.status(404).json(BaseApiResponse('Project Not Found', null));
+
         const ownerId = update.rows[0].owner_id;
 
         const collaborators = await pool.query(`SELECT user_id FROM collaborators WHERE project_id = $1`, [id]);
 
         const collaboratorsList = collaborators.rows;
         
-        let values = [];
-        for(let index in collaboratorsList) {
-            let val = [id, collaboratorsList[index].user_id, ownerId];
-            values.push(val);
+        let query = `INSERT INTO ratings (project_id, user_id, reviewer_id) VALUES `
+
+        for(let i = 0; i < collaboratorsList.length; i++){
+            console.log(collaboratorsList[i]);
+
+            if(i < collaboratorsList.length - 1){
+                query += `(${id}, ${collaboratorsList[i].user_id}, ${ownerId}), `;
+            }
+            else {
+                query += `(${id}, ${collaboratorsList[i].user_id}, ${ownerId})`;
+            }
         }
 
-        const result = await pool.query(`INSER INTO ratings (project_id, user_id, reviewer_id) VALUES ?`, [values]);
+        console.log(query);
+        const result = await pool.query(query);
 
-        res.status(200).json(result.rows[0]); // Mengembalikan data proyek yang ditemukan
+        res.status(200).json(BaseApiResponse('Successfully ended project', null)); // Mengembalikan data proyek yang ditemukan
     } 
     
     catch (error) {
-        console.error('Error getting project by ID:', error);
-        res.status(400).json({ error: error.message });
+        console.log(error);
+        res.status(500).json(BaseApiResponse(error.message, null ));
     }
 }
 
 // Controller untuk memperbarui proyek berdasarkan ID
 exports.updateProjectById = async (req, res) => {
     const projectId = req.params.id;
-    const { title, description, status, progress } = req.body;
+    const { title, description, status } = req.body;
 
     try {
         const result = await pool.query(`UPDATE projects SET title = $1, description = $2, 
-            status = $3, progress = $4 WHERE id = $5 RETURNING *`, [title, description, status, progress, projectId]);
-        res.status(200).json(result.rows[0]); // Mengembalikan data proyek yang telah diperbarui
+            status = $3 WHERE id = $4 RETURNING *`, [title, description, status, projectId]);
+        
+        if(result.rows.length == 0)
+            return res.status(404).json(BaseApiResponse('Project Not Found', null));
+
+        res.status(200).json(BaseApiResponse('Successfully Update project', result.rows[0])); // Mengembalikan data proyek yang telah diperbarui
     } 
     
     catch (error) {
-        console.error('Error updating project by ID:', error);
-        res.status(400).json({ error: error.message });
+        console.log(error);
+        res.status(500).json(BaseApiResponse(error.message, null ));
     }
 };
 
@@ -152,13 +193,16 @@ exports.deleteProjectById = async (req, res) => {
     const projectId = req.params.id;
 
     try {
-        await pool.query(`DELETE FROM projects WHERE id = $1 AND progress <> 'DONE'`, [projectId]);
-        res.status(204).json()
+        const result = await pool.query(`DELETE FROM projects WHERE id = $1 AND progress <> 'DONE' RETURNING *`, [projectId]);
+        
+        if(result.rows.length == 0) throw new Error('Projects is not valid to delete');
+
+        res.status(200).json(BaseApiResponse('Successfully Delete Project', null))
     } 
     
     catch (error) {
-        console.error('Error deleting project by ID:', error);
-        res.status(400).json({ error: error.message });
+        console.log(error);
+        res.status(500).json(BaseApiResponse(error.message, null ));
     }
 };
 
