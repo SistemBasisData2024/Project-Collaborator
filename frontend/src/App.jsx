@@ -1,7 +1,6 @@
 // src/App.jsx
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -9,7 +8,6 @@ import RegisterPage from "./pages/RegisterPage";
 const App = () => {
   return (
     <Router>
-      <Navbar />
       <div className="main-content">
         <Routes>
           <Route path="/" element={<LandingPage />} />

@@ -1,4 +1,5 @@
 /* src/index.css */
+
 body, html {
   height: 100%;
   margin: 0;
@@ -12,17 +13,3 @@ body, html {
   height: 100%;
 }
 
-.main-content {
-  flex: 1;
-  padding-top: 64px; /* Sesuaikan dengan tinggi navbar */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #f0f0f0; /* Latar belakang opsional */
-}
-
-.main-content a:hover,
-.main-content a:hover > .MuiButton-label {
-  color: yellow !important;
-}
