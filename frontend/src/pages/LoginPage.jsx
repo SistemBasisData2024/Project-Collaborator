@@ -22,7 +22,7 @@ export default function Main() {
 
     if (response.ok) {
       alert('Login successful');
-      navigate('/'); // Redirect to homepage after login
+      navigate('/home'); // Redirect to homepage after login
     } else {
       alert(`Login failed: ${data.message}`);
     }
