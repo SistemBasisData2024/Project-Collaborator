@@ -89,7 +89,7 @@ cd backend
 npm install
 ```
 
-- Run Frontend
+- Run Backend
 ```
 npm run start
 
