@@ -7,6 +7,7 @@ import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import HomePages from "./pages/HomePages";
 import DetailPage from "./pages/DetailPage";
+import { UserProvider } from './contexts/UserContext';
 
 const App = () => {
   return (

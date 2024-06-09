@@ -8,6 +8,7 @@ export default function DetailPage() {
     const [projectDetail, setProjectDetail] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [role, setRole] = useState(""); // New state for role input
 
     useEffect(() => {
         axios.get(`http://localhost:3000/projects/${projectId}`)
@@ -28,8 +29,13 @@ export default function DetailPage() {
     }, [projectDetail]);
 
     const handleApply = async () => {
-        const userId = 6; // Replace with the actual user ID
-        const role = "Apa Aja Boleh"; // Replace with the actual role the user wants to apply for
+        const user = JSON.parse(localStorage.getItem('user')); // Retrieve user data from local storage
+        const userId = user ? user.id : null;
+
+        if (!userId) {
+            alert('User is not logged in.');
+            return;
+        }
 
         try {
             const response = await axios.post('http://localhost:3000/applications', {
@@ -137,7 +143,16 @@ export default function DetailPage() {
                             <p>No collaborators found.</p>
                         )}
                     </div>
-                    <button className="apply-button" onClick={handleApply}>Apply</button>
+                    <div className="apply-section">
+                    <input 
+                    type="text" 
+                    className="role-input" 
+                    placeholder="Enter role" 
+                    value={role} 
+                    onChange={(e) => setRole(e.target.value)} 
+                />
+                <button className="apply-button" onClick={handleApply}>Apply</button>
+            </div>
                 </div>
             </div>
         </div>

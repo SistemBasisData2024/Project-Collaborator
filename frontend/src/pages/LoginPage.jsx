@@ -22,12 +22,13 @@ export default function Main() {
 
     if (response.ok) {
       alert('Login successful');
+      localStorage.setItem('user', JSON.stringify(data.data)); // Save user data to local storage
       navigate('/home'); // Redirect to homepage after login
     } else {
       alert(`Login failed: ${data.message}`);
     }
   };
-
+  
   return (
     <div className='main-container w-[1440px] h-[869px] bg-[#003049] relative overflow-hidden mx-auto my-0'>
       <div className='w-[1440px] h-[182px] relative z-[2] mt-[14px] mr-0 mb-0 ml-0'>
