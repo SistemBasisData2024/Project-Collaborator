@@ -24,3 +24,42 @@ textarea,
 button {
   outline: 0;
 }
+
+.application-card {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px 0;
+    margin-left: 70px;
+}
+
+.application-card h3 {
+    margin: 0 0 10px;
+}
+
+.application-card p {
+    margin: 0 0 10px;
+}
+
+.accept-btn, .deny-btn {
+    margin-right: 10px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.accept-btn {
+    background-color: green;
+    color: white;
+}
+
+.deny-btn {
+    background-color: red;
+    color: white;
+}
+
+.application-card:first-of-type {
+    margin-top: 90px; /* Ubah nilai sesuai dengan kebutuhan Anda */
+  }

@@ -19,7 +19,7 @@ export default function MyApplicationPage() {
 
     const handleAccept = async (applicationId) => {
         try {
-            await axios.put(`http://localhost:3000/applications/${applicationId}/accept`);
+            await axios.put(`http://localhost:3000/applications/accept/${applicationId}`);
             setApplications(applications.map(app => 
                 app.id === applicationId ? { ...app, status: 'ACCEPTED' } : app
             ));
@@ -32,7 +32,7 @@ export default function MyApplicationPage() {
 
     const handleDeny = async (applicationId) => {
         try {
-            await axios.put(`http://localhost:3000/applications/${applicationId}/reject`);
+            await axios.put(`http://localhost:3000/applications/reject/${applicationId}`);
             setApplications(applications.map(app => 
                 app.id === applicationId ? { ...app, status: 'REJECTED' } : app
             ));
@@ -100,25 +100,22 @@ export default function MyApplicationPage() {
                     <span className="flex h-[8.12%] justify-start items-start font-['Poppins'] text-[20px] font-medium leading-[48px] text-[#d9d9d9] absolute top-[69.04%] left-[30.67%] text-left whitespace-nowrap z-40">
                         Profile Setting
                     </span>
-                    <div className='w-[10.5%] h-[5.36%] absolute top-[70.68%] left-[14.5%] overflow-hidden z-[50]'>
-                        <div className='w-[120%] h-[120%] absolute top-[-10%] left-[-11%] overflow-hidden z-[53]'>
-                            <div className='w-[34.02px] h-[33.27px] bg-[url(../assets/images/5b29ec94-cf87-4bb2-9a4b-898d059f2d66.png)] bg-[length:100%_100%] bg-no-repeat relative z-[54] mt-[2.015px] mr-0 mb-0 ml-[2.97px]' />
-                        </div>
-                        <div className='w-full h-full absolute top-0 left-0 z-[51]'>
-                            <div className='w-full h-full bg-[url(../assets/images/791ca684-0199-4d30-bc29-07a74d7c1b6c.png)] bg-[length:100%_100%] bg-no-repeat absolute top-0 left-0 z-[52]' />
-                        </div>
-                    </div>
-                    <span className="flex h-[8.12%] justify-start items-start font-['Poppins'] text-[20px] font-medium leading-[48px] text-[#d9d9d9] absolute top-[85.88%] left-[30.67%] text-left whitespace-nowrap z-40">
-                        Logout
+                    <div className='w-[10%] h-[5.08%] bg-[url(../assets/images/64821f1b-1e15-409a-9b04-ea93d55f133a.png)] bg-[length:100%_100%] bg-no-repeat absolute top-[70.73%] left-[12.33%] z-[21]' />
+                    <span className="flex h-[8.12%] justify-start items-start font-['Poppins'] text-[20px] font-medium leading-[48px] text-[#d9d9d9] absolute top-[79.02%] left-[30.67%] text-left whitespace-nowrap z-40">
+                        <Link to="/" className="highlight-text">Logout</Link>
                     </span>
-                    <div className='w-[8.5%] h-[4.42%] absolute top-[87.32%] left-[15.5%] overflow-hidden z-[30]'>
-                        <div className='w-[120%] h-[120%] absolute top-[-10%] left-[-11%] overflow-hidden z-[33]'>
-                            <div className='w-[27.4px] h-[27.23px] bg-[url(../assets/images/b22f7c2b-1983-4dbf-bb6d-2951e5c5f7b4.png)] bg-[length:100%_100%] bg-no-repeat relative z-[34] mt-[2.015px] mr-0 mb-0 ml-[2.97px]' />
-                        </div>
-                        <div className='w-full h-full absolute top-0 left-0 z-[31]'>
-                            <div className='w-full h-full bg-[url(../assets/images/2b03276b-36d8-4da3-90a0-5b6cd9d2e345.png)] bg-[length:100%_100%] bg-no-repeat absolute top-0 left-0 z-[32]' />
-                        </div>
+                    <div className='w-[10%] h-[5.08%] absolute top-[80.54%] left-[11%] overflow-hidden z-[22]'>
+                        <div className='w-[18.75px] h-[18.75px] bg-[url(../assets/images/2ea19915-0de8-401f-a471-452d868b6f1e.png)] bg-[length:100%_100%] bg-no-repeat relative z-[23] mt-[5.625px] mr-0 mb-0 ml-[5.625px]' />
                     </div>
+                </div>
+                <div className='w-[38.16%] h-[9.49%] bg-[#780000] rounded-[25px] absolute top-[2.54%] left-[27.63%] z-30'>
+                    <span className="flex h-[85.71%] justify-start items-start font-['Poppins'] text-[20px] font-medium leading-[48px] text-[#d9d9d9] absolute top-[7.14%] left-[68.16%] text-left whitespace-nowrap z-40">
+                        <Link to="/myapp" className="highlight-text">Sent</Link>
+                    </span>
+                    <span className="flex h-[85.71%] justify-start items-start font-['Poppins'] text-[20px] font-medium leading-[48px] text-[#780000] absolute top-[7.14%] left-[21.61%] text-left whitespace-nowrap z-40">
+                        Received
+                    </span>
+                    <button className='w-[46.67%] h-[53.57%] bg-[#d9d9d9] rounded-[25px] border-none absolute top-1/4 left-[3.45%] z-[31] pointer' />
                 </div>
                 <div className="ml-[250px] mt-[50px] mr-[50px]">
                     {applications.length === 0 ? (
@@ -126,10 +123,11 @@ export default function MyApplicationPage() {
                     ) : (
                         applications.map(application => (
                             <div key={application.id} className="application-card">
-                                <h3>{application.title}</h3>
+                                <h3 className="text-[24px] font-semibold text-[#780000] mb-[10px]">{application.project.name}</h3>
+                                <p>User: {application.user.name}</p>
                                 <p>Status: {application.status}</p>
                                 <button onClick={() => handleAccept(application.id)} className="accept-btn">Accept</button>
-                                <button onClick={() => handleDeny(application.id)} className="deny-btn">Deny</button>
+                                <button onClick={() => handleDeny(application.id)} className="deny-btn">Reject</button>
                             </div>
                         ))
                     )}
