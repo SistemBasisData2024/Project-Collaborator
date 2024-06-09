@@ -92,7 +92,7 @@ export default function HomePage() {
         <div className="projects-container" style={{ width: "62%", height: "100%", overflowY: "auto" }}>
           {projects.length > 0 ? (
             projects.map((project, index) => (
-              <div key={index} className='w-[22.19%] h-[200px] text-[0px] bg-[#fff] rounded-[25px] absolute shadow-[0_4px_4px_0_rgba(0,0,0,0.25)]' style={{ left: `${27.63 + (index % 3) * 25}%`, top: `${16.78 + Math.floor(index / 3) * 40}%` }}>
+                <Link to={`/detail/${project.id}`} key={index} className='w-[22.19%] h-[200px] text-[0px] bg-[#fff] rounded-[25px] absolute shadow-[0_4px_4px_0_rgba(0,0,0,0.25)]' style={{ left: `${27.63 + (index % 3) * 25}%`, top: `${16.78 + Math.floor(index / 3) * 40}%` }}>
                 <span className="block h-[48px] font-['Poppins'] text-[20px] font-medium leading-[48px] text-[#003049] relative text-left whitespace-nowrap z-40 mt-[20px] mr-0 mb-0 ml-[30px]">
                   {project.name}
                 </span>
@@ -102,7 +102,7 @@ export default function HomePage() {
                 <span className="block h-[20px] font-['Poppins'] text-[13px] font-medium leading-[20px] text-[#003049] relative text-left whitespace-nowrap z-40 mt-[5px] mr-0 mb-0 ml-[30px]">
                   Owner ID: {project.owner_id}
                 </span>
-              </div>
+              </Link>
             ))
           ) : (
             <span className="block h-[20px] font-['Poppins'] text-[13px] font-medium leading-[20px] text-[#003049] relative text-left whitespace-nowrap z-40 mt-[20px] mr-0 mb-0 ml-[30px]">

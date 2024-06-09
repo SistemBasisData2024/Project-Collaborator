@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import HomePages from "./pages/HomePages";
+import DetailPage from "./pages/DetailPage";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/homes" element={<HomePages />} />
+          <Route path="/detail/:projectId" element={<DetailPage />} />
         </Routes>
       </div>
     </Router>
