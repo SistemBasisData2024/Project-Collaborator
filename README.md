@@ -12,6 +12,105 @@ How Users Can Get Started with ProjectPals?
 
 Users can start by creating a profile on ProjectPals, indicating their skills and expertise. They can then browse through available projects under the "Hire" section or mark their status as "Open to Work" to signal their availability for new opportunities.
 
-Who Contributes to ProjectPals?
 
-ProjectPals was created to fulfill the final project requirements of the Sistem Basis Data subject during our second year. The contributors to this project are Azriel Dimas, Fathia Alfajr, and Nicholas Samosir. Additionally, users contribute to the platform by providing feedback and suggestions, helping to improve and evolve the service.
+## Who Contributes to ProjectPals?
+
+- [Azriel Dimas Ash-Shidiqi](https://github.com/AzDimas) (2206059414)
+- [Nicholas Samosir](https://github.com/Exorthe) (2206059396)
+- [Fathia Zulfa Alfajr](https://github.com/fathialfajr) (2206030501)
+
+
+## ⛩ Table : 
+
+### 1. `User`
+```
+id
+name
+password
+email
+profile_pic
+bio
+open_to_work
+```
+
+### 2. `Projects`
+```
+id
+nama
+description
+owner_id
+status
+progress
+started_at
+ended_at
+```
+
+### 3. `Collaborators`
+```
+project_id
+user_id
+role
+```
+
+### 4. `Applications`
+```
+id
+project_id
+user_id
+role
+status
+```
+
+### 5. `Ratings`
+```
+id
+project_id
+user_id
+reviewer_id
+rating
+review
+status
+```
+
+
+## 💻 Installation Guide : 
+- Melakukan Clone Repository LibCatalog
+```
+git clone https://github.com/SistemBasisData2024/ProjectPals.git
+```
+
+### Backend
+- Change directory 
+```
+cd backend
+```
+- Install Dependencies
+```
+npm install
+```
+
+- Run Frontend
+```
+npm run start
+
+```
+
+
+### Frontend
+- Change directory 
+```
+cd frontend
+```
+- Install Dependencies
+```
+npm install
+```
+
+- Run Frontend
+```
+npm run dev
+
+```
+
+## Special Thanks to
+- Our Aslab Bang Bintang
