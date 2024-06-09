@@ -1,5 +1,5 @@
 const pool = require("../config/database");
-const { BaseApiResponse } = require("../config/utils");
+const { BaseApiResponse, ApplicationUserResponse, ApplicationOwnerResponse } = require("../config/utils");
 
 // Controller untuk menambahkan aplikasi baru
 exports.createApplication = async (req, res) => {
@@ -31,20 +31,7 @@ exports.getAllApplicationByOwnerId = async (req, res) => {
 
         const result = [];
         for(let i = 0; i < data.rows.length; i++){
-            let temp = {
-                id: data.rows[i].id,
-                status: data.rows[i].status,
-                role: data.rows[i].role,
-                project: {
-                    id: data.rows[i].project_id,
-                    name: data.rows[i].project_name
-                },
-                user: {
-                    id: data.rows[i].user_id,
-                    name: data.rows[i].user_name,
-                    email: data.rows[i].email
-                }
-            }
+            let temp = ApplicationOwnerResponse(data.rows[i]);
             result.push(temp);
         }
         
@@ -66,15 +53,7 @@ exports.getAllApplicationByUserId = async(req, res) => {
 
         const result = [];
         for(let i = 0; i < data.rows.length; i++){
-            let temp = {
-                id: data.rows[i].id,
-                status: data.rows[i].status,
-                project: {
-                    id: data.rows[i].project_id,
-                    name: data.rows[i].name,
-                    description: data.rows[i].description
-                }
-            }
+            let temp = ApplicationUserResponse(data.rows[i]);
             result.push(temp);
         }
 
