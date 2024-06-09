@@ -9,3 +9,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
   </React.StrictMode>,
 );
+
+const container = document.getElementById('app');
+const root = createRoot(container);
+root.render(<App />);

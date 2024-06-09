@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --default-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Ubuntu, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei",
+    "Source Han Sans CN", sans-serif;
+}
+
+.main-container {
+  overflow: hidden;
+}
+
+.main-container,
+.main-container * {
+  box-sizing: border-box;
+}
+
+input,
+select,
+textarea,
+button {
+  outline: 0;
+}
+
+.input-field {
+    width: 349px;
+    height: 58px;
+    background: url('../../assets/images/9e13362e-72c7-4b61-9291-a63d9696150a.png') no-repeat;
+    background-size: 100% 100%;
+    border: none;
+    padding-left: 15px; /* Sesuaikan padding sesuai kebutuhan */
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    color: #e28383;
+    outline: none;
+  }
+  
+  .input-field::placeholder {
+    color: #e28383;
+    opacity: 1; /* Pilihan untuk memastikan placeholder terlihat jelas */
+  }
