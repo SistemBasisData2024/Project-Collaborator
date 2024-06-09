@@ -9,6 +9,7 @@ import HomePages from "./pages/HomePages";
 import DetailPage from "./pages/DetailPage";
 import MyApplicationPage from "./pages/MyApplicationPage";
 import MyApplicationPages from "./pages/MyApplicationPages";
+import CreatePage from "./pages/CreatePage";
 
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="/detail/:projectId" element={<DetailPage />} />
           <Route path="/myapp" element={<MyApplicationPage />} />
           <Route path="/myapps" element={<MyApplicationPages />} />
+          <Route path="/create" element={<CreatePage />} />
         </Routes>
       </div>
     </Router>
