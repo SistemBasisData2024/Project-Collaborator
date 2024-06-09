@@ -22,7 +22,9 @@ exports.createProject = async (req, res) => {
 // Controller untuk mendapatkan semua proyek
 exports.getAllOpenProjects = async (req, res) => {
     try {
-        const result = await pool.query(`SELECT * FROM projects WHERE status = 'OPEN'`);
+        const result = await pool.query(`SELECT projects.id, projects.name as project_name, projects.description, users.name as user_name, users.email 
+            FROM projects INNER JOIN users ON projects.owner_id = users.id
+            WHERE status = 'OPEN'`);
         res.status(200).json(BaseApiResponse('Successfully get all open projects', result.rows)); // Mengembalikan semua data proyek
     } 
     

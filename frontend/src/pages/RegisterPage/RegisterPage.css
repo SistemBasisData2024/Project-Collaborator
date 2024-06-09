@@ -28,7 +28,7 @@ button {
 .input-field {
     width: 349px;
     height: 58px;
-    background: url('../assets/images/9e13362e-72c7-4b61-9291-a63d9696150a.png') no-repeat;
+    background: url('../../assets/images/9e13362e-72c7-4b61-9291-a63d9696150a.png') no-repeat;
     background-size: 100% 100%;
     border: none;
     padding-left: 15px; /* Sesuaikan padding sesuai kebutuhan */
