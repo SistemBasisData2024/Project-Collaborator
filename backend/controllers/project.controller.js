@@ -1,5 +1,5 @@
 const pool = require('../config/database');
-const { BaseApiResponse } = require('../config/utils');
+const { BaseApiResponse, ProjectDetailResponse } = require('../config/utils');
 
 // Controller untuk membuat proyek baru
 exports.createProject = async (req, res) => {
@@ -101,21 +101,8 @@ exports.getProjectById = async (req, res) => {
             FROM collaborators INNER JOIN users on collaborators.user_id = users.id WHERE project_id = $1`, [projectData.id]);
         const collaboratorsData = data.rows;
 
-        const result = {
-            name: projectData.name,
-            description: projectData.description,
-            status: projectData.status,
-            progress: projectData.progress,
-            started_at: projectData.started_at,
-            ended_at: projectData.ended_at,
-            owner: {
-                id: userData.id,
-                name: userData.name,
-                email: userData.email,
-                profile_pic: userData.profile_pic
-            },
-            collaborator: collaboratorsData
-        }
+        const result = ProjectDetailResponse(projectData, userData, collaboratorsData);
+
         res.status(200).json(BaseApiResponse('Successfully get project', result)); // Mengembalikan data proyek yang ditemukan
     } 
     
@@ -156,7 +143,7 @@ exports.finishProject = async (req, res) => {
         }
 
         console.log(query);
-        const result = await pool.query(query);
+        await pool.query(query);
 
         res.status(200).json(BaseApiResponse('Successfully ended project', null)); // Mengembalikan data proyek yang ditemukan
     } 

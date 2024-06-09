@@ -1,6 +1,6 @@
 // controllers/RatingController.js
 const pool = require("../config/database");
-const { BaseApiResponse } = require("../config/utils");
+const { BaseApiResponse, RatingByUserResponse, RatingForUserResponse } = require("../config/utils");
 
 // Controller untuk membuat penilaian baru
 exports.createRating = async (req, res) => {
@@ -33,22 +33,7 @@ exports.getAllRatingsByUser = async (req, res) => {
 
         let result = [];
         for(let i = 0; i < data.rows.length; i++){
-            let temp = {
-                id: data.rows[i].rating_id,
-                rating: data.rows[i].rating,
-                review: data.rows[i].review,
-                status: data.rows[i].status,
-                project: {
-                    id: data.rows[i].project_id,
-                    name: data.rows[i].project_name
-                },
-                user: {
-                    id: data.rows[i].user_id,
-                    profile_pic: data.rows[i].profile_pic,
-                    name: data.rows[i].user_name,
-                    role: data.rows[i].role
-                }
-            }
+            let temp = RatingByUserResponse(data.rows[i]);
             result.push(temp);
         }
         
@@ -74,20 +59,7 @@ exports.getAllRatingsForUser = async (req, res) => {
 
         let result = [];
         for(let i = 0; i < data.rows.length; i++){
-            let temp = {
-                rating: data.rows[i].rating,
-                review: data.rows[i].review,
-                status: data.rows[i].status,
-                project: {
-                    id: data.rows[i].project_id,
-                    name: data.rows[i].project_name
-                },
-                reviewer: {
-                    id: data.rows[i].user_id,
-                    profile_pic: data.rows[i].profile_pic,
-                    name: data.rows[i].user_name
-                }
-            }
+            let temp = RatingForUserResponse(data.rows[i]);
             result.push(temp);
         }
 
