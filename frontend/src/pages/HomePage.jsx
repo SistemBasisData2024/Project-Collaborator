@@ -48,7 +48,7 @@ export default function HomePage() {
               </div>
           </button>
           <span className="block h-[48px] font-['Poppins'] text-[20px] font-medium leading-[48px] text-[#d9d9d9] relative text-left whitespace-nowrap z-40 mt-[5px] mr-0 mb-0 ml-[92px]">
-            My Application
+            <Link to="/myapp" className="highlight-text">My Application</Link>
           </span>
           <span className="block h-[48px] font-['Poppins'] text-[20px] font-medium leading-[48px] text-[#d9d9d9] relative text-left whitespace-nowrap z-40 mt-[11px] mr-0 mb-0 ml-[92px]">
             My Projects
@@ -88,7 +88,6 @@ export default function HomePage() {
           </span>
           <button className='w-[46.67%] h-[53.57%] bg-[#d9d9d9] rounded-[25px] border-none absolute top-1/4 left-[3.45%] z-[31] pointer' />
         </div>
-        <div className='w-[0.7%] h-[46.44%] bg-[#646b70] rounded-[10px] absolute top-[4.24%] left-[98.68%] z-[32]' />
         <div className="projects-container" style={{ width: "62%", height: "100%", overflowY: "auto" }}>
           {projects.length > 0 ? (
             projects.map((project, index) => (

@@ -7,7 +7,9 @@ import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import HomePages from "./pages/HomePages";
 import DetailPage from "./pages/DetailPage";
-import { UserProvider } from './contexts/UserContext';
+import MyApplicationPage from "./pages/MyApplicationPage";
+import MyApplicationPages from "./pages/MyApplicationPages";
+
 
 const App = () => {
   return (
@@ -23,6 +25,8 @@ const App = () => {
           <Route path="/home" element={<HomePage />} />
           <Route path="/homes" element={<HomePages />} />
           <Route path="/detail/:projectId" element={<DetailPage />} />
+          <Route path="/myapp" element={<MyApplicationPage />} />
+          <Route path="/myapps" element={<MyApplicationPages />} />
         </Routes>
       </div>
     </Router>

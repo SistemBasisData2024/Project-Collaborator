@@ -111,7 +111,7 @@ export default function DetailPage() {
                         <div className="w-[18.75px] h-[18.75px] bg-[url(../assets/images/2ea19915-0de8-401f-a471-452d868b6f1e.png)] bg-cover relative z-[23] mt-[5.625px] mx-auto" />
                     </div>
                 </div>
-                <div className="project-card bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl mx-auto detail-card">
+                <div className="project-card bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl mx-auto detail-card" style={{ margin: "0px 300px" }}>
                     <h2 className="text-2xl font-bold mb-4">{projectDetail.name}</h2>
                     <p className="mb-2"><strong>Description:</strong> {projectDetail.description}</p>
                     <p className="mb-2"><strong>Status:</strong> {projectDetail.status}</p>
