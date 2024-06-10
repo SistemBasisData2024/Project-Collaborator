@@ -22,13 +22,13 @@ Users can start by creating a profile on ProjectPals, indicating their skills an
 
 ## :bar_chart: Diagram
 
-UML
+###UML
 ![uml](https://github.com/SistemBasisData2024/ProjectPals/blob/main/image/uml.jpg?raw=true)
 
-ERD
+###ERD
 ![erd](https://github.com/SistemBasisData2024/ProjectPals/blob/main/image/erd.jpg?raw=true)
 
-Flowchart
+###Flowchart
 ![flowchart](https://github.com/SistemBasisData2024/ProjectPals/blob/main/image/flowchart.jpg?raw=true)
 
 
