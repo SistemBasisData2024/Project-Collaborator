@@ -70,6 +70,7 @@ id
 project_id
 user_id
 role
+message
 status
 ```
 
