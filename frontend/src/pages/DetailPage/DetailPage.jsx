@@ -4,102 +4,118 @@ import { Link, useParams } from "react-router-dom";
 import "./DetailPage.css";
 import NavBar from "../../components/NavBar";
 import ProfileBar from "../../components/ProfileBar";
+import { dateFormatter } from "../../lib/utils";
+import { getProjectDetail } from "../../lib/actions/projects.actions";
+import { makeApplications } from "../../lib/actions/applications.actions";
+import { checkUser } from "../../lib/utils";
+import Modal from "../../components/Modal";
 
 export default function DetailPage() {
+  checkUser();
+
+  const user = JSON.parse(localStorage.getItem('user'));
+  const userId = user.id;
+
   const { projectId } = useParams();
-  const [projectDetail, setProjectDetail] = useState(null);
+  const [projectDetail, setProjectDetail] = useState({});
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [role, setRole] = useState(""); // New state for role input
+  const [modal, setModal] = useState(false);
 
-  useEffect(() => {
-      axios.get(`http://localhost:3000/projects/${projectId}`)
-          .then(response => {
-              console.log('API response:', response.data);
-              setProjectDetail(response.data.data);
-              setLoading(false);
-          })
-          .catch(error => {
-              console.error('Error fetching project detail:', error);
-              setError('Error fetching project details');
-              setLoading(false);
-          });
-  }, [projectId]);
-
-  useEffect(() => {
-      console.log('projectDetail state:', projectDetail);
-  }, [projectDetail]);
-
-  const handleApply = async () => {
-      const user = JSON.parse(localStorage.getItem('user')); // Retrieve user data from local storage
-      const userId = user ? user.id : null;
-
-      if (!userId) {
-          alert('User is not logged in.');
-          return;
-      }
-
-      try {
-          const response = await axios.post('http://localhost:3000/applications', {
-              project_id: projectId,
-              user_id: userId,
-              role: role
-          });
-          console.log('Application response:', response.data);
-          alert('Application submitted successfully!');
-      } catch (error) {
-          console.error('Error submitting application:', error);
-          alert('Failed to submit application');
-      }
+  const handleApply = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    
+    const dataJson = Object.fromEntries(formData.entries());
+    
+    const response = await makeApplications({
+      project_id: projectId,
+      user_id: userId,
+      role: dataJson.role,
+      message: dataJson.message
+    });
+    if(response.success) {
+      console.log('Application response:', response.data);
+      alert('Application submitted successfully!');
+      setModal(false);
+    }
+    else {
+      console.error('Error submitting application:', error);
+      alert('Failed to submit application');
+    }
+    
   };
 
+  const fetchProjectDetail = async (id) => {
+    const response = await getProjectDetail(id);
+
+    if(response.success){
+      setProjectDetail(response.response.data);
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchProjectDetail(projectId);
+  }, []);
+
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
 
   return (
-    <div className="main-container w-full h-full bg-[#003049] relative overflow-hidden mx-auto my-0">
+    <div className='w-screen h-max bg-[#003049] overflow-hidden mx-auto my-0'>
       <NavBar login={false} />
-      <div className="w-[1140px] h-[590px] bg-[#d9d9d9] rounded-[25px] relative z-[11] mt-[30px] mb-[50px] mx-auto overflow-x-hidden overflow-y-auto p-6">
+      <div className='w-[1140px] h-[620px] bg-[#d9d9d9] rounded-[25px] mt-[30px] mr-0 mb-20 ml-[150px] overflow-hidden flex flex-row'>
         <ProfileBar active={'HOME'} />
-        <div className="project-card bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl detail-card ml-[300px]" >
-          <h2 className="text-2xl font-bold mb-4">{projectDetail.name}</h2>
-          <p className="mb-2"><strong>Description:</strong> {projectDetail.description}</p>
-          <p className="mb-2"><strong>Status:</strong> {projectDetail.status}</p>
-          <p className="mb-2"><strong>Progress:</strong> {projectDetail.progress}</p>
-          <p className="mb-2"><strong>Started At:</strong> {new Date(projectDetail.started_at).toLocaleString()}</p>
-          <p className="mb-2"><strong>Ended At:</strong> {projectDetail.ended_at ? new Date(projectDetail.ended_at).toLocaleString() : 'Not Ended Yet'}</p>
-          <div className="owner-section mb-4">
-            <h3 className="text-xl font-semibold">Owner:</h3>
-            <ul>
-              <li><strong>Name:</strong> {projectDetail.owner.name}</li>
-              <li><strong>Email:</strong> {projectDetail.owner.email}</li>
-            </ul>
+        <Modal isVisible={modal} onClose={() => setModal(false)}>
+          <p className="text-xl font-semibold">Collaborators Application Form</p>
+          <form className='flex flex-col' onSubmit={handleApply}>
+            <label>Role</label>
+            <input 
+              type="text" 
+              className="border-2 border-black py-1 px-2 mb-3" 
+              placeholder="Enter role" 
+              name="role"/>
+            <label>Message</label>
+            <input 
+              type="text"
+              className="h-[200px] border-black border-2 py-1 px-2 mb-3 text-start"
+              placeholder="Write your message the owner."
+              name="message"/>
+            <button className="bg-green-500 px-7 py-1 text-white rounded-lg hover:scale-105 transition-all duration-75" type="submit">Apply</button>
+          </form>
+        </Modal>
+        <div className="bg-white p-6 rounded-lg shadow-lg w-full m-10 overflow-y-auto" >
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-col">
+              <h2 className="text-2xl font-bold">{projectDetail.name}</h2>
+              <p className="">{dateFormatter(new Date(projectDetail.started_at), '/')} - {projectDetail.ended_at ? dateFormatter(new Date(projectDetail.ended_at), '/') : 'Not Ended Yet'}</p>
+            </div>
+            { userId == projectDetail.owner.id ? <></> :
+              <button className="bg-green-500 px-7 text-white rounded-lg hover:scale-105 transition-all duration-75" onClick={(e) => setModal(true)}>
+                Apply as Collaborator
+              </button>
+            }
           </div>
-          <div className="collaborators-section mb-4">
-            <h3 className="text-xl font-semibold">Collaborators:</h3>
+          <div className='w-full h-[5px] bg-[#003049] rounded-[50px] my-2' />
+          <div className="mb-4">
+            <h3 className="text-md font-semibold inline">Owner: </h3>
+            <p className="inline">{projectDetail.owner.name} [{projectDetail.owner.email}]</p>
+          </div>
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold">Collaborators:</h3>
             {projectDetail.collaborator.length > 0 ? (
-              <ul>
+              <ul className="list-disc">
                 {projectDetail.collaborator.map((collab, index) => (
-                  <li key={index} className="mb-2">
-                    <strong>Name:</strong> {collab.name} <br />
-                    <strong>Role:</strong> {collab.role} <br />
-                    {collab.profile_pic && <img src={collab.profile_pic} alt="Collaborator Profile" className="w-10 h-10 rounded-full" />}
+                  <li key={index} className="mb-1 ml-5">
+                    {collab.name} - {collab.role} <br />
                   </li>
                 ))}
               </ul>
             ) : (
-              <p>No collaborators found.</p>
+              <p>No collaborators yet.</p>
             )}
           </div>
-          <div className="apply-section">
-          <input 
-            type="text" 
-            className="role-input" 
-            placeholder="Enter role" 
-            value={role} 
-            onChange={(e) => setRole(e.target.value)}/>
-          <button className="apply-button" onClick={handleApply}>Apply</button>
-        </div>
+          <p className="mb-2"><strong>Description:</strong> {projectDetail.description}</p>
         </div>
       </div>
     </div>

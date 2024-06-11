@@ -38,12 +38,17 @@ exports.getUserRunningProjects = async (req, res) => {
     const id = req.params.user_id;
 
     try{
-        const result = await pool.query(`SELECT * FROM projects WHERE (owner_id = $1 
-            OR id = (
-                SELECT project_id FROM collaborators WHERE user_id = $1
-            )) AND progress = 'RUNNING'`, [id]);
+        let result = [];
+        let query = await pool.query(`SELECT * FROM projects WHERE owner_id = $1 
+            AND progress = 'RUNNING'`, [id]);
+        result = result.concat(query.rows);
 
-        res.status(200).json(BaseApiResponse('Succesfully get user running projects', result.rows));
+        query = await pool.query(`SELECT projects.id, projects.name, projects.description, projects.description, projects.owner_id,
+            projects.status, projects.progress, projects.started_at, projects.ended_at FROM projects INNER JOIN collaborators 
+            ON projects.id = collaborators.project_id WHERE collaborators.user_id = $1 AND progress = 'RUNNING'`, [id]);
+        result = result.concat(query.rows);
+        
+        res.status(200).json(BaseApiResponse('Succesfully get user running projects', result));
     }
 
     catch(error){

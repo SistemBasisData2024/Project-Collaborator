@@ -11,26 +11,33 @@ import HomeUserPage from "./pages/HomeUserPages/HomeUserPage";
 import DetailPage from "./pages/DetailPage/DetailPage";
 import MyApplicationPage from "./pages/MyApplicationsPage/MyApplicationPage";
 import MyApplicationPages from "./pages/MyApplicationsPages/MyApplicationPages";
+import MyProjectPage from "./pages/MyProjectPage/MyProjectPage";
+import MyReviewPage from "./pages/MyReviewPage/MyReviewPage";
+import ProfileSetting from "./pages/ProfileSetting/ProfileSetting";
+import { UserProvider } from "./contexts/UserContext";
 
 
 const App = () => {
   return (
     <Router>
-      <div className="main-content">
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/find-collaborator" element={<LandingPage />} /> {/* Placeholder */}
-          <Route path="/find-projects" element={<LandingPage />} /> {/* Placeholder */}
-          <Route path="/profile" element={<LandingPage />} /> {/* Placeholder */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/home" element={<HomeProjectPage />} />
-          <Route path="/homes" element={<HomeUserPage />} />
-          <Route path="/detail/:projectId" element={<DetailPage />} />
-          <Route path="/myapp" element={<MyApplicationPage />} />
-          <Route path="/myapps" element={<MyApplicationPages />} />
-        </Routes>
-      </div>
+      <UserProvider>
+        <div className="main-content">
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/profile" element={<LandingPage />} /> {/* Placeholder */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/home" element={<HomeProjectPage />} />
+            <Route path="/homes" element={<HomeUserPage />} />
+            <Route path="/project/:projectId" element={<DetailPage />} />
+            <Route path="/myapp" element={<MyApplicationPage />} />
+            <Route path="/myapps" element={<MyApplicationPages />} />
+            <Route path="/myprojects" element={<MyProjectPage />} />
+            <Route path="/myreviews" element={<MyReviewPage/>} />
+            <Route path="/setting" element={<ProfileSetting />} />
+          </Routes>
+        </div>
+      </UserProvider>
     </Router>
   );
 };

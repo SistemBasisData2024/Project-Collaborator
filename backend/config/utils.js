@@ -6,6 +6,7 @@ exports.BaseApiResponse = (message, data) => ({
 exports.ApplicationUserResponse = (data) =>  ({
     id: data.id,
     status: data.status,
+    role: data.role,
     project: {
         id: data.project_id,
         name: data.name,
@@ -17,6 +18,7 @@ exports.ApplicationOwnerResponse = (data) => ({
     id: data.id,
     status: data.status,
     role: data.role,
+    message: data.message,
     project: {
         id: data.project_id,
         name: data.project_name
