@@ -9,42 +9,9 @@
     "Source Han Sans CN", sans-serif;
 }
 
-.main-container {
-  overflow: hidden;
-}
-
-.main-container,
-.main-container * {
-  box-sizing: border-box;
-}
-
 input,
 select,
 textarea,
 button {
   outline: 0;
-}
-
-.apply-button {
-    padding: 10px 20px;
-    background-color: #780000;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.apply-button:hover {
-    background-color: #c1121f;
-}
-
-.detail-card {
-  margin-left: 300px; /* Adjust this value as needed */
-}
-
-.role-input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: calc(100% - 22px); /* Adjust width to match parent element */
-  margin-bottom: 10px;
 }

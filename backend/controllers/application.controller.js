@@ -3,11 +3,11 @@ const { BaseApiResponse, ApplicationOwnerResponse, ApplicationUserResponse } = r
 
 // Controller untuk menambahkan aplikasi baru
 exports.createApplication = async (req, res) => {
-    const { project_id, user_id, role } = req.body;
+    const { project_id, user_id, role, message } = req.body;
 
     try {
-        const result = await pool.query(`INSERT INTO applications (project_id, user_id, role)
-            VALUES ($1, $2, $3) RETURNING *`, [project_id, user_id, role]);
+        const result = await pool.query(`INSERT INTO applications (project_id, user_id, role, message)
+            VALUES ($1, $2, $3, $4) RETURNING *`, [project_id, user_id, role, message]);
         res.status(200).json(BaseApiResponse('Successfully create application', result.rows[0])); // Mengembalikan data aplikasi yang baru ditambahkan
     } 
     
@@ -22,7 +22,7 @@ exports.getAllApplicationByOwnerId = async (req, res) => {
     const id = req.params.user_id;
 
     try {
-        const data = await pool.query(`SELECT applications.id, applications.status, applications.role, projects.name AS project_name, projects.id AS project_id,
+        const data = await pool.query(`SELECT applications.id, applications.status, applications.role, applications.message, projects.name AS project_name, projects.id AS project_id,
             users.id AS user_id, users.name AS user_name, users.email FROM applications 
             INNER JOIN projects ON applications.project_id = projects.id 
             INNER JOIN users ON users.id = applications.user_id
@@ -48,12 +48,14 @@ exports.getAllApplicationByUserId = async(req, res) => {
     const id = req.params.user_id;
 
     try {
-        const data = await pool.query(`SELECT applications.id, applications.status, projects.name, projects.description, projects.id AS project_id
-            FROM applications INNER JOIN projects ON applications.project_id = projects.id WHERE user_id = $1`, [id]);
+        const data = await pool.query(`SELECT applications.id, applications.status, applications.role, projects.name, projects.description, projects.id AS project_id
+            FROM applications INNER JOIN projects ON applications.project_id = projects.id WHERE applications.user_id = $1`, [id]);
 
+        console.log(data.rows);
         let result = [];
         for(let i = 0; i < data.rows.length; i++){
             let temp = ApplicationUserResponse(data.rows[i]);
+            console.log(temp);
             result.push(temp);
         }
 

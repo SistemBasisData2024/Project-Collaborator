@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './RegisterPage.css';
 import { useNavigate, Link } from 'react-router-dom';
+import { register } from '../../lib/actions/users.actions';
+import { useUser } from '../../contexts/UserContext';
 
 export default function RegisterPage() {
   const [name, setName] = useState('');
@@ -8,20 +10,24 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  const { user } = useUser();
+
+  if(user != null) {
+    window.location.replace('/home');
+  }
+
   const handleRegister = async (e) => {
     e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
 
-    const response = await fetch('http://localhost:3000/users/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, email, password }),
-    });
+    const dataJson = Object.fromEntries(formData.entries());
+
+    const response = await register({ name: dataJson.name, email: dataJson.email, password: dataJson.password });
 
     const data = await response.json();
 
-    if (response.ok) {
+    if (response.success) {
       alert('Registration successful');
       navigate('/login');
     } else {
@@ -64,25 +70,22 @@ export default function RegisterPage() {
           <input 
             type="text" 
             className='input-field' 
-            placeholder="Name" 
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            placeholder="Name"
+            name='name'
             required
           />
           <input 
             type="email" 
             className='input-field mt-[57px]' 
             placeholder="Email Address" 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name='email'
             required
           />
           <input 
             type="password" 
             className='input-field mt-[57px]' 
             placeholder="Password" 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name='password'
             required
           />
           <button type="submit" className='w-[189.131px] h-[36px] bg-[#780000] border-none relative z-20 pointer mt-[57px] mr-0 mb-0 ml-0'>

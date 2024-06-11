@@ -3,9 +3,15 @@ import './LoginPage.css';
 import { useNavigate, Link } from 'react-router-dom';
 import NavBar from '../../components/NavBar';
 import { login } from '../../lib/actions/users.actions';
+import { useUser } from '../../contexts/UserContext';
 
 export default function Main() {
   const navigate = useNavigate();
+  const {user, setUser} = useUser();
+
+  if(user != null) {
+    window.location.replace('/home');
+  }
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,7 +24,11 @@ export default function Main() {
 
     if (response.success) {
       alert('Login successful');
-      localStorage.setItem('user', JSON.stringify(response.response.data)); // Save user data to local storage
+      console.log(response.response.data);
+      setUser(response.response.data);
+      console.log("SET USER");
+      console.log(user);
+      // localStorage.setItem('user', JSON.stringify(response.response.data)); // Save user data to local storage
       navigate('/home'); // Redirect to homepage after login
     } else {
       alert(`Login failed: ${response.response.message}`);

@@ -3,9 +3,9 @@ import { BaseResponse } from "../utils";
 
 const API_URL = "http://localhost:3000/users";
 
-export async function login(data) {
+export async function register(data){
     try {
-        const res = await axios.post(`${API_URL}/login`, data);
+        const res = await axios.post(`${API_URL}/register`, data);
         console.log(res);
         return BaseResponse(true, res.data);
     }
@@ -15,9 +15,9 @@ export async function login(data) {
     }
 }
 
-export async function register(data) {
+export async function login(data) {
     try {
-        const res = await axios.post(`${API_URL}/register`, data);
+        const res = await axios.post(`${API_URL}/login`, data);
         console.log(res);
         return BaseResponse(true, res.data);
     }
