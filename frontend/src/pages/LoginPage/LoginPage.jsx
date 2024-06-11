@@ -23,11 +23,8 @@ export default function Main() {
     const response = await login({ email: dataJson.email, password: dataJson.password });
 
     if (response.success) {
-      alert('Login successful');
       console.log(response.response.data);
       setUser(response.response.data);
-      console.log("SET USER");
-      console.log(user);
       // localStorage.setItem('user', JSON.stringify(response.response.data)); // Save user data to local storage
       navigate('/home'); // Redirect to homepage after login
     } else {
