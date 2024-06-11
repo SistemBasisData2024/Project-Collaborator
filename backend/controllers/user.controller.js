@@ -71,7 +71,7 @@ exports.getUserById = async (req, res) => {
 };
 
 // Controller untuk memperbarui pengguna berdasarkan ID
-exports.updateUserById = async (req, res) => {
+exports.updateUserProfileInfo = async (req, res) => {
     const id = req.params.id;
     const { name, profile_picture, bio, open_to_work } = req.body;
 
@@ -83,7 +83,7 @@ exports.updateUserById = async (req, res) => {
         if(result.rows.length == 0)
             return res.status(404).json(BaseApiResponse('User Not Found', null));
         
-        return res.status(200).json(BaseApiResponse("Succesfully update user", result.rows[0])); // Mengembalikan data user yang telah diperbarui
+        return res.status(200).json(BaseApiResponse("Succesfully update profile user", result.rows[0])); // Mengembalikan data user yang telah diperbarui
     } 
     
     catch (error) {
@@ -91,6 +91,24 @@ exports.updateUserById = async (req, res) => {
         return res.status(500).json(BaseApiResponse(error.message, null));
     }
 };
+
+exports.updateUserLoginInfo = async(req, res) => {
+    const id = req.params.id;
+    const { email, password } = req.body;
+
+    try {
+        const result = await pool.query(`UPDATE users SET email = $1, password = $2 WHERE id = $3`, [email, password, id]);
+
+        if(result.rows.length == 0)
+            return res.status(404).json(BaseApiResponse('User Not Found', null));
+
+        return res.status(200).json(BaseApiResponse("Succesfully update login user", result.rows[0])); 
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(500).json(BaseApiResponse(error.message, null));
+    }
+}
 
 // Controller untuk menghapus pengguna berdasarkan ID
 exports.deleteUserById = async (req, res) => {

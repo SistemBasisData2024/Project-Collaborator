@@ -15,6 +15,7 @@ import MyProjectPage from "./pages/MyProjectPage/MyProjectPage";
 import MyReviewPage from "./pages/MyReviewPage/MyReviewPage";
 import ProfileSetting from "./pages/ProfileSetting/ProfileSetting";
 import { UserProvider } from "./contexts/UserContext";
+import MyReviewPages from "./pages/MyReviewPages/MyReviewPages";
 
 
 const App = () => {
@@ -33,7 +34,8 @@ const App = () => {
             <Route path="/myapp" element={<MyApplicationPage />} />
             <Route path="/myapps" element={<MyApplicationPages />} />
             <Route path="/myprojects" element={<MyProjectPage />} />
-            <Route path="/myreviews" element={<MyReviewPage/>} />
+            <Route path="/myreview" element={<MyReviewPage/>} />
+            <Route path="/myreviews" element={<MyReviewPages/>} />
             <Route path="/setting" element={<ProfileSetting />} />
           </Routes>
         </div>

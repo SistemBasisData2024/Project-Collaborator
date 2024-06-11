@@ -10,7 +10,8 @@ router.post('/login', UserController.login);
 router.get('/', UserController.getAvailableCollaborator);
 router.get('/:id', UserController.getUserById);
 
-router.put('/:id', UserController.updateUserById);
+router.put('/profile/:id', UserController.updateUserProfileInfo);
+router.put('/login/:id', UserController.updateUserLoginInfo);
 
 router.delete('/:id', UserController.deleteUserById);
 

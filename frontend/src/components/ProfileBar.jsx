@@ -59,12 +59,12 @@ export default function ProfileBar({active}){
             active == 'REVIEW' ?
             <button className='w-[240px] h-fit flex flex-row bg-[#d9d9d9] rounded-3xl border-none relative items-center'>
               <span className="font-['Poppins'] text-[20px] font-medium leading-[48px] text-[#780000] text-left whitespace-nowrap ml-12">
-                <Link to="/myreviews">My Review</Link>
+                <Link to="/myreview">My Review</Link>
               </span>
             </button>
             :
             <span className="block h-[48px] font-['Poppins'] text-[20px] font-medium leading-[48px] text-[#d9d9d9] relative text-left whitespace-nowrap ml-12 hover:underline">
-              <Link to="/myreviews">My Review</Link>
+              <Link to="/myreview">My Review</Link>
             </span>
           }
         </div>
