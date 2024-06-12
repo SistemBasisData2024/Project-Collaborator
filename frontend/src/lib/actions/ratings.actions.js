@@ -14,3 +14,13 @@ export async function getRatingByUser(id) {
     }
 }
 
+export async function sendReview(id, data){
+    try {
+        const res = await axios.put(`${API_URL}/${id}`, data);
+        return BaseResponse(true, res.data);
+    }
+    catch(err){
+        console.log(err.response.data);
+        return BaseResponse(false, err.response.data);
+    }
+}

@@ -6,9 +6,10 @@ const { BaseApiResponse, RatingByUserResponse, RatingForUserResponse } = require
 exports.createRating = async (req, res) => {
     const id = req.params.id;
     const { rating, review } = req.body;
+    console.log(rating + " " + review);
 
     try {
-        const result = await pool.query(`UPDATE ratings SET rating = $1, review = $2 WHERE id = $3`, [rating, review, id]);
+        const result = await pool.query(`UPDATE ratings SET rating = $1, review = $2, status = 'DONE' WHERE id = $3`, [rating, review, id]);
         
         res.status(201).json(BaseApiResponse('Successfully created rating', result.rows[0])); // Mengembalikan data rating yang baru ditambahkan
     } 

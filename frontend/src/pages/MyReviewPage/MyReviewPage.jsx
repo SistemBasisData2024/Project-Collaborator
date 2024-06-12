@@ -1,14 +1,31 @@
 import { Link } from "react-router-dom";
 import NavBar from "../../components/NavBar";
 import ProfileBar from "../../components/ProfileBar";
-import { Rating } from "@material-tailwind/react";
-import { useState } from "react";
+import { Rating, rating } from "@material-tailwind/react";
+import { useEffect, useState } from "react";
+import { getRatingByUser } from "../../lib/actions/ratings.actions";
+import { useUser } from "../../contexts/UserContext";
+import ReviewCard from "../../components/ReviewCard";
 
 export default function MyReviewPage() {
-  const [rating, setRating] = useState(1);
-  const fetchRatingByUser = async (e) => {
-    
+  const {user} = useUser();
+  const [ratingList, setRatingList] = useState([]);
+  const fetchRatingByUser = async (id) => {
+    const response = await getRatingByUser(id);
+
+    if(response.success){
+      const set = response.response.data.filter((x) => x.status == 'PENDING');
+      setRatingList(set);
+      console.log(set);
+    }
   }
+
+  useEffect(() => {
+    fetchRatingByUser(user.id);
+    console.log(ratingList)
+  }, [])
+
+  if(!ratingList) return<p>LOADING.........</p>
 
   return( 
     <div className='w-screen h-max bg-[#003049] overflow-hidden mx-auto my-0'>
@@ -24,8 +41,15 @@ export default function MyReviewPage() {
               <Link to="/myreviews" className="highlight-text">DONE</Link>
             </span>
           </div>
-          <div className="h-fit bg-white w-full flex flex-row">
-            <Rating value={rating} className="h-fit w-[50px]"  ratedColor="yellow" onChange={(value) => setRating(value)}/>
+          <div className="h-fit w-full flex flex-col space-y-4">
+            { ratingList.length > 0 ?
+              ratingList.map((rating) => (
+                  <ReviewCard review={rating} key={rating.id}/>
+              )
+              )
+              :
+              <p>No review to be done</p>
+            }
           </div>
         </div>          
       </div>
