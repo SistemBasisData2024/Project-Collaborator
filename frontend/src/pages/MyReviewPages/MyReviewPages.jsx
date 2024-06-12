@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import NavBar from "../../components/NavBar";
 import ProfileBar from "../../components/ProfileBar";
+import { Rating } from "@material-tailwind/react";
 
 export default function MyReviewPages() {
   return( 
