@@ -32,7 +32,7 @@ Users can start by creating a profile on ProjectPals, indicating their skills an
 ![flowchart](https://github.com/SistemBasisData2024/ProjectPals/blob/main/image/flowchart.jpg?raw=true)
 
 ### API List
-![API list](https://docs.google.com/spreadsheets/d/1xK7s0XFgYpYQvRbd7losJbM0iIrn374As9btCa5gc88/edit?gid=0#gid=0)
+[API list](https://docs.google.com/spreadsheets/d/1xK7s0XFgYpYQvRbd7losJbM0iIrn374As9btCa5gc88/edit?gid=0#gid=0)
 
 ## ⛩ Table : 
 
