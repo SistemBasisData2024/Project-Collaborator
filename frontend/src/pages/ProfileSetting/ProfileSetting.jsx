@@ -70,16 +70,18 @@ export default function ProfileSetting(){
               <input 
                 type="text" 
                 className="border-b-2 border-black col-span-5" 
-                placeholder={user.name} 
+                value={user.name} 
+                placeholder="Username"
                 name="name"
                 required/>
             </div>
             <div className="grid grid-cols-6">
-              <label>Biograph :</label>
+              <label>Bio :</label>
               <input 
                 type="text"
                 className="border-black border-b-2 col-span-5"
-                placeholder={user.bio ? user.bio : "No bio yet."}
+                value={user.bio ? user.bio : "No bio yet."}
+                placeholder="User Bio"
                 name="bio"
                 required/>
             </div>

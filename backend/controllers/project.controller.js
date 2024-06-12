@@ -164,11 +164,11 @@ exports.finishProject = async (req, res) => {
 // Controller untuk memperbarui proyek berdasarkan ID
 exports.updateProjectById = async (req, res) => {
     const projectId = req.params.id;
-    const { title, description, status } = req.body;
+    const { name, description, status } = req.body;
 
     try {
-        const result = await pool.query(`UPDATE projects SET title = $1, description = $2, 
-            status = $3 WHERE id = $4 RETURNING *`, [title, description, status, projectId]);
+        const result = await pool.query(`UPDATE projects SET name = $1, description = $2, 
+            status = $3 WHERE id = $4 RETURNING *`, [name, description, status, projectId]);
         
         if(result.rows.length == 0)
             return res.status(404).json(BaseApiResponse('Project Not Found', null));

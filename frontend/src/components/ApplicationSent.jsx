@@ -23,7 +23,7 @@ export default function ApplicationSent({ application }) {
           :
           <button
             onClick={() => handleCancel(application.id)}
-            className="bg-[#c1121f] text-[#ffffff] py-2 px-4 rounded-[5px] hover:scale-105 transition-all duration-75">
+            className="bg-[#c1121f] text-[#ffffff] py-2 px-4 rounded-md hover:scale-105 transition-all duration-75">
             Cancel Application
           </button>
         }

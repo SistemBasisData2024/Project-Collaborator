@@ -33,8 +33,8 @@ export default function ApplicationReceived({application}) {
         <Link to={`/project/${application.project.id}`} className="text-[24px] font-semibold text-[#003049] hover:underline">{application.project.name}</Link>
         {application.status == 'PENDING' ?
         <div className="flex flex-row justify-between space-x-4 items-center">
-          <button onClick={() => handleDeny(application.id)} className="px-8 py-1 bg-[#003049] text-white rounded-xl hover:scale-105 transition-all duration-75">Reject</button>
-          <button onClick={() => handleAccept(application.id)} className="px-8 py-1 bg-[#003049] text-white rounded-xl hover:scale-105 transition-all duration-75">Accept</button>
+          <button onClick={() => handleDeny(application.id)} className="px-8 py-1 bg-[#003049] text-white rounded-md hover:scale-105 transition-all duration-75">Reject</button>
+          <button onClick={() => handleAccept(application.id)} className="px-8 py-1 bg-[#003049] text-white rounded-md hover:scale-105 transition-all duration-75">Accept</button>
         </div>
         :
         <>

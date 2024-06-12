@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "./DetailPage.css";
 import NavBar from "../../components/NavBar";
 import ProfileBar from "../../components/ProfileBar";
 import { dateFormatter } from "../../lib/utils";
-import { getProjectDetail } from "../../lib/actions/projects.actions";
+import { finishProjects, getProjectDetail } from "../../lib/actions/projects.actions";
 import { makeApplications } from "../../lib/actions/applications.actions";
 import { checkUser } from "../../lib/utils";
 import Modal from "../../components/Modal";
@@ -15,6 +15,7 @@ export default function DetailPage() {
 
   const user = JSON.parse(localStorage.getItem('user'));
   const userId = user.id;
+  const navigate = useNavigate();
 
   const { projectId } = useParams();
   const [projectDetail, setProjectDetail] = useState({});
@@ -45,6 +46,15 @@ export default function DetailPage() {
     }
     
   };
+
+  const handleFinishProject = async () => {
+    const response = await finishProjects(projectId);
+
+    alert(response.response.message);
+    if(response.success){
+      navigate('/myreview');
+    }
+  }
 
   const fetchProjectDetail = async (id) => {
     const response = await getProjectDetail(id);
@@ -90,8 +100,12 @@ export default function DetailPage() {
               <h2 className="text-2xl font-bold">{projectDetail.name}</h2>
               <p className="">{dateFormatter(new Date(projectDetail.started_at), '/')} - {projectDetail.ended_at ? dateFormatter(new Date(projectDetail.ended_at), '/') : 'Not Ended Yet'}</p>
             </div>
-            { userId == projectDetail.owner.id ? <></> :
-              <button className="bg-green-500 px-7 text-white rounded-lg hover:scale-105 transition-all duration-75" onClick={(e) => setModal(true)}>
+            { userId == projectDetail.owner.id ? 
+              <button className="bg-red-800 px-7 text-white rounded-lg hover:scale-105 transition-all duration-75" onClick={() => handleFinishProject()}>
+                End Project
+              </button>
+             :
+              <button className="bg-green-500 px-7 text-white rounded-lg hover:scale-105 transition-all duration-75" onClick={() => setModal(true)}>
                 Apply as Collaborator
               </button>
             }
