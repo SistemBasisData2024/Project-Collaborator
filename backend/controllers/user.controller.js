@@ -17,7 +17,7 @@ exports.register = async (req, res) => {
     
     catch (error) {
         console.log(error);
-        res.status(500).json(error.message, null);
+        res.status(500).json(BaseApiResponse(error.message, null));
     }
 };
 

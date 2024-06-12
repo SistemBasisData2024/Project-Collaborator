@@ -30,7 +30,7 @@ exports.getAllRatingsByUser = async (req, res) => {
             INNER JOIN users ON ratings.user_id = users.id
             INNER JOIN projects ON ratings.project_id = projects.id
             INNER JOIN collaborators ON ratings.user_id = collaborators.user_id
-            WHERE ratings.reviewer_id = $1`, [id]);
+            WHERE ratings.reviewer_id = $1 AND collaborators.project_id = projects.id`, [id]);
 
         let result = [];
         for(let i = 0; i < data.rows.length; i++){

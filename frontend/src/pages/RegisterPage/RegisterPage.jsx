@@ -10,11 +10,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const { user } = useUser();
-
-  if(user != null) {
-    window.location.replace('/home');
-  }
+  
 
   const handleRegister = async (e) => {
     e.preventDefault();

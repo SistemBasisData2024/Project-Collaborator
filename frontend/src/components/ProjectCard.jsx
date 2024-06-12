@@ -7,9 +7,7 @@ import { useState } from "react";
 export default function ProjectCard({project}) {
   const projectStatus = project.status == 'OPEN' ? true : false;
   const [modal, setModal] = useState(false);
-  const [isSelected, setSelected] = useState(projectStatusy
-    
-  );
+  const [isSelected, setSelected] = useState(projectStatus);
   const [name, setName] = useState(project.name)
   const [description, setDescription] = useState(project.description);
 
