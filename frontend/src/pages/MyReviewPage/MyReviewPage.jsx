@@ -22,7 +22,6 @@ export default function MyReviewPage() {
 
   useEffect(() => {
     fetchRatingByUser(user.id);
-    console.log(ratingList)
   }, [])
 
   if(!ratingList) return<p>LOADING.........</p>
@@ -43,10 +42,8 @@ export default function MyReviewPage() {
           </div>
           <div className="h-fit w-full flex flex-col space-y-4">
             { ratingList.length > 0 ?
-              ratingList.map((rating) => (
-                  <ReviewCard review={rating} key={rating.id}/>
-              )
-              )
+              ratingList.map((rating, index) => (
+                  <ReviewCard review={rating} key={index}/>))
               :
               <p>No review to be done</p>
             }
