@@ -7,12 +7,13 @@ import ProfileBar from "../../components/ProfileBar";
 import { getSentApplications } from "../../lib/actions/applications.actions";
 import ApplicationSent from "../../components/ApplicationSent";
 import { checkUser } from "../../lib/utils";
+import { useUser } from "../../contexts/UserContext";
 
 export default function MyApplicationPage() {
   checkUser();
 
+  const { user }= useUser();// Retrieve the logged-in user from local storage
   const [applications, setApplications] = useState([]);
-  const user = JSON.parse(localStorage.getItem('user')); // Retrieve the logged-in user from local storage
 
   const fetchApplicationsList = async (id) => {
     const response = await getSentApplications(id);
